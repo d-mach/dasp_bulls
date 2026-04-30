@@ -1,70 +1,92 @@
 import random
 
 
-DELKA = 4
+DELKA: int = 4 
 
-print(f"""
+
+def pozdrav(pocet_cislic: int):
+    print(f"""
 Hi there!
 -----------------------------------------------
-I've generated a random {DELKA} digit number for you.
+I've generated a random {pocet_cislic} digit number for you.
 Let's play a bulls and cows game.
 -----------------------------------------------
 Enter a number:
 -----------------------------------------------""")
 
-moznosti = ["1", "2", "3", "4", "5", "6", "7", "8", "9"]
-vyber_pocitace = [random.choice(moznosti)]
-moznosti.remove(vyber_pocitace[0])
-moznosti.append("0")
 
-kolik_jeste = DELKA-1
-while kolik_jeste > 0:
-    r = random.choice(moznosti)
-    vyber_pocitace.append(r)
-    moznosti.remove(r)
-    kolik_jeste -= 1
+def vygeneruj_cislo(pocet_cislic: int) -> list[str]:
+    moznosti: list[str] = ["1", "2", "3", "4", "5", "6", "7", "8", "9"]
+    vyber_pocitace: list[str] = [random.choice(moznosti)]
+    moznosti.remove(vyber_pocitace[0])
+    moznosti.append("0")
 
-#print(vyber_pocitace)
+    kolik_jeste: int = pocet_cislic-1
+    while kolik_jeste > 0:
+        r: str = random.choice(moznosti)
+        vyber_pocitace.append(r)
+        moznosti.remove(r)
+        kolik_jeste -= 1
 
-pokusy = 0
-bull = 0
-while bull < DELKA:
+    return vyber_pocitace
+
+
+def pokus_uzivatele(pocet_cislic: int) -> str:
     while True:
-        vyber = input(">>> ")
-        if len(vyber) != DELKA:
-            print(f"Please enter {DELKA} digits")
+        vyber: str = input(">>> ")
+        if len(vyber) != pocet_cislic:
+            print(f"Please enter {pocet_cislic} digits")
         elif not vyber.isdigit():
             print("Please enter only digits") 
         elif vyber[0] == "0":
             print("Please don´t start with zero")
         else:
-            duplicity = set()
+            duplicity: set = set()
             for x in vyber:
                 duplicity.add(x)
-            if len(duplicity) != DELKA:
+            if len(duplicity) != pocet_cislic:
                 print("Please don´t use digits repeatedly") 
             else:
                 break
 
-    pokusy += 1
-         
-    bull = 0
-    cow = 0
+    return vyber
+
+
+def vyhodnot_pokus(vyber_pocitace: list[str], vyber: str) -> tuple[int, int]:
+    bull: int = 0
+    cow: int = 0
     for p, u in zip(vyber_pocitace, vyber):
         if p == u:
             bull += 1
         elif u in vyber_pocitace:
             cow += 1
     
-    if bull < DELKA:    
-        print(f"{bull} bull{'' if bull == 1 else 's'}, {cow} cow{'' if cow == 1 else 's'}")
-        print("-----------------------------------------------")
-    else: 
-        print(f"Correct, you've guessed the right number\nin {pokusy} guesses!")
-        print("-----------------------------------------------")
-        print("That's amazing!")
+    return (bull, cow)
+
+
+def main():
+    pozdrav(DELKA)
+    vyber_pocitace = vygeneruj_cislo(DELKA)
+    print(vyber_pocitace)
+
+    pokusy: int = 0
+    bull: int = 0
+    cow: int = 0
+    while bull < DELKA:
+        pokusy += 1
+        vyber = pokus_uzivatele(DELKA)
+        bull, cow = vyhodnot_pokus(vyber_pocitace, vyber)
+
+        if bull < DELKA:    
+            print(f"{bull} bull{'' if bull == 1 else 's'}, {cow} cow{'' if cow == 1 else 's'}")
+            print("-----------------------------------------------")
+        else: 
+            print(f"Correct, you've guessed the right number\nin {pokusy} guesses!")
+            print("-----------------------------------------------")
+            print("That's amazing!")
     
-      
-    
+     
+if __name__ == "__main__":
+    main()  
     
           
