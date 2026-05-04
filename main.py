@@ -5,6 +5,7 @@ DELKA: int = 4
 
 
 def pozdrav(pocet_cislic: int):
+    """Vypíše pozdrav; jako parametr potřebuje délku generovaného čísla"""
     print(f"""
 Hi there!
 -----------------------------------------------
@@ -16,6 +17,7 @@ Enter a number:
 
 
 def vygeneruj_cislo(pocet_cislic: int) -> list[str]:
+    """Vygeneruje se náhodné číslo; vrátí jako seznam číslic; parametr určuje délku"""
     moznosti: list[str] = ["1", "2", "3", "4", "5", "6", "7", "8", "9"]
     vyber_pocitace: list[str] = [random.choice(moznosti)]
     moznosti.remove(vyber_pocitace[0])
@@ -32,6 +34,7 @@ def vygeneruj_cislo(pocet_cislic: int) -> list[str]:
 
 
 def pokus_uzivatele(pocet_cislic: int) -> str:
+    """Zajistí správnost číslic od uživatele; vratí je jako str; parametr určuje délku"""
     while True:
         vyber: str = input(">>> ")
         if len(vyber) != pocet_cislic:
@@ -53,6 +56,8 @@ def pokus_uzivatele(pocet_cislic: int) -> str:
 
 
 def vyhodnot_pokus(vyber_pocitace: list[str], vyber: str) -> tuple[int, int]:
+    """Vyhodnotí pokus uživatele s číslicemi od počítače; vrátí tuple[bulls, cows];
+    v parametrech očekává výběr počítače jako list a výběr uživatele jako str"""
     bull: int = 0
     cow: int = 0
     for p, u in zip(vyber_pocitace, vyber):
@@ -67,7 +72,7 @@ def vyhodnot_pokus(vyber_pocitace: list[str], vyber: str) -> tuple[int, int]:
 def main():
     pozdrav(DELKA)
     vyber_pocitace = vygeneruj_cislo(DELKA)
-    print(vyber_pocitace)
+    #print(vyber_pocitace)
 
     pokusy: int = 0
     bull: int = 0
